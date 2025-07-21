@@ -1,0 +1,162 @@
+
+/* public/style.css */
+body {
+    font-family: sans-serif;
+    margin: 2em;
+    background-color: #f4f4f4;
+   }
+   
+   #quoteForm {
+    width: 500px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 1em;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   }
+   
+   #quoteForm div {
+    margin-bottom: 0.75em;
+   }
+   
+   #quoteForm label {
+    display: block;
+    margin-bottom: 0.25em;
+    font-weight: bold;
+   }
+   
+   #quoteForm input,
+   #quoteForm select {
+    width: 100%;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+   }
+   
+   #quoteForm button {
+    background-color: #007bff;
+    color: white;
+    padding: 0.75em 1em;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 100%;
+   }
+   
+   #quoteForm button:hover {
+    background-color: #0056b3;
+   }
+   
+   #quoteResult {
+    margin-top: 2em;
+    padding: 1em;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    overflow-x: auto; /* For long quote results */
+   }
+   
+   #tokenDisplay {
+    margin-top: 1em;
+    padding: 0.5em;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    word-wrap: break-word; /* Prevents overflow */
+   }
+   
+   .error {
+    color: red;
+    font-size: 0.8em;
+   }
+   .api-response-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.api-response-item {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #eee;
+    padding: 0.5em 0;
+    width: 100%;
+}
+
+.api-response-key {
+    width: 30%;
+    font-weight: bold;
+    padding-right: 0.5em;
+    text-align: right;
+}
+
+.api-response-value {
+    width: 70%;
+    padding-left: 0.5em;
+}
+
+.themed-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; / Override default look /
+  appearance: none;
+  margin-top: -6px; / Adjust vertical position to center on track (if track height is 4px, thumb 16px) /
+  background-color: #e91c63; / Your theme color /
+  height: 1rem; / 16px /
+  width: 1rem; / 16px /
+  border-radius: 9999px; / Full circle /
+  cursor: pointer;
+}
+
+.themed-slider::-moz-range-thumb {
+  background-color: #e91c63; / Your theme color /
+  height: 1rem;
+  width: 1rem;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+}
+.insurer-logo {
+    max-width: 100px; /* Or your preferred size */
+    max-height: 50px; /* Or your preferred size */
+    margin-bottom: 10px;
+    /* Add other styles as needed */
+    display: block; /* Or inline-block, depending on layout */
+}
+
+/* Example basic card styling */
+.insurance-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+}
+.card-header {
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+}
+.card-header h2 {
+    margin-top: 0;
+    font-size: 1.2em;
+}
+.benefits-list {
+    list-style-type: disc;
+    padding-left: 20px;
+    font-size: 0.9em;
+}
+.custom-offer-badge {
+    color: green;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+.insurer-logo-custom-class {
+    max-height: 60px; /* Adjust as needed */
+    display: block; /* Or inline-block */
+    margin-bottom: 10px;
+    /* Add other styles like margin: auto for centering if needed */
+}
+.same-size-input {
+    width: 100%;     /* Makes the input take the full width of its parent container */
+    max-width: 300px; /* Limits the maximum width for larger screens */
+    padding: 0.5rem;  /* Adds some internal spacing */
+    margin-bottom: 0.5rem; /* Adds space below each input */
+    box-sizing: border-box; /* Ensures padding and border are included in the width calculation */
+}
