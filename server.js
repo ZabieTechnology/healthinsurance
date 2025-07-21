@@ -40,8 +40,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// Serve static files (like index.html, css, and client-side js) from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+// **UPDATED:** Serve static files from the 'dist' directory created by Vite
+app.use(express.static(path.join(__dirname, 'dist')));
 // Parse incoming JSON request bodies
 app.use(express.json());
 
@@ -72,7 +72,7 @@ app.post('/api/send-medical-lead', async (req, res) => {
         <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; font-size: 14px;">
             <tr style="background-color: #f2f2f2;"><td style="width: 30%;"><strong>Full Name:</strong></td><td>${leadData.fullName || 'N/A'}</td></tr>
             <tr><td style="background-color: #f2f2f2;"><strong>Date of Birth:</strong></td><td>${leadData.dob || 'N/A'}</td></tr>
-            <tr style="background-color: #f2f2f2;"><td><strong>Nationality:</strong></td><td>${leadData.nationality || 'N/A'}</td></tr>
+            <tr style="background-color: #f2f2f2;"><strong>Nationality:</strong></td><td>${leadData.nationality || 'N/A'}</td></tr>
             <tr><td style="background-color: #f2f2f2;"><strong>Emirate of Residence:</strong></td><td>${leadData.residenceEmirate || 'N/A'}</td></tr>
             <tr style="background-color: #f2f2f2;"><td><strong>Email:</strong></td><td>${leadData.email || 'N/A'}</td></tr>
             <tr><td style="background-color: #f2f2f2;"><strong>Mobile:</strong></td><td>${leadData.mobile || 'N/A'}</td></tr>
@@ -104,16 +104,11 @@ app.post('/api/send-medical-lead', async (req, res) => {
 });
 
 
-// --- Root Route ---
-// This ensures that anyone visiting the root URL gets the main HTML file.
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// --- Catch-all for 404 Not Found ---
-app.use((req, res) => {
-    console.warn(`404 Not Found: ${req.method} ${req.originalUrl}`);
-    res.status(404).send('404: Page Not Found');
+// --- Catch-all Route for Single-Page Application ---
+// This ensures that any direct navigation to a route like /about or /contact
+// will serve the main index.html file, letting React Router handle the view.
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 // --- Global Error Handler ---
@@ -129,5 +124,5 @@ app.use((err, req, res, next) => {
 // --- Start Server ---
 app.listen(port, () => {
     console.log(`\n🚀 Medical Insurance Portal Server running on http://localhost:${port}`);
-    console.log(`   Serving static files from: ${path.join(__dirname, 'public')}`);
+    console.log(`   Serving static files from: ${path.join(__dirname, 'dist')}`);
 });
