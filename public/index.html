@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motor Insurance Quote</title>
+    <title>Medical Insurance Quote</title>
     <link rel="icon" type="image/x-icon" href="/css/images/favicon.ico">
     <link rel="shortcut icon" href="/css/images/favicon.ico" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/vendor/choices/choices.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css"/>
     <style>
         body { font-family: 'Inter', sans-serif; }
         :root {
@@ -26,12 +26,6 @@
         input.form-input-style:disabled {
             border-bottom-color: var(--field-disabled-border-color); background-color: var(--field-disabled-bg-color); cursor: not-allowed; opacity: 0.7;
         }
-        /* Specific style for the number input to allow for adornments */
-        input[type="number"].form-input-style {
-            padding-left: 2.5rem; /* Adjust based on AED prefix */
-            padding-right: 6rem; /* Adjust based on range text */
-        }
-
         select:not([data-choice]) {
             border: none; border-bottom: 2px solid var(--field-border-color); border-radius: 0;
             padding-left: 0.25rem; padding-right: 2.5rem; padding-top: var(--field-py); padding-bottom: var(--field-py);
@@ -57,59 +51,16 @@
             display: block; width: 100%; padding: var(--field-py) 0.25rem; min-height: calc(2 * var(--field-py) + 1.5rem + 2px); line-height: 1.5rem; color: #4b5563;
             border-bottom: 2px solid var(--field-disabled-border-color); background-color: #f9fafb; @apply mt-1;
         }
-        /* Styling for Radio Buttons */
         .form-radio {
             @apply focus:ring-offset-0 focus:ring-2 focus:ring-[#c2185b] focus:ring-opacity-50 border-gray-400 text-[#e91c63];
         }
-        /* Style for slider thumb */
-        .themed-slider::-webkit-slider-thumb {
-            appearance: none;
-            margin-top: -6px; /* Adjust based on track/thumb height */
-            background-color: #e91c63; /* Theme color */
-            height: 1rem; /* 16px */
-            width: 1rem; /* 16px */
-            border-radius: 9999px; /* Full circle */
-            cursor: pointer;
-        }
-        .themed-slider::-moz-range-thumb {
-            background-color: #e91c63; /* Theme color */
-            height: 1rem;
-            width: 1rem;
-            border-radius: 9999px;
-            border: none;
-            cursor: pointer;
-        }
-        /* Remove number input spinners */
-        input[type=number]::-webkit-outer-spin-button,
-        input[type=number]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
-
-        /* New styles for step visibility and progress bar */
-        .step-section {
-            display: none; /* Hidden by default, JavaScript will manage visibility */
-        }
-        .step-section.active {
-            display: block;
-        }
+        .step-section { display: none; }
+        .step-section.active { display: block; }
         .progress-bar-container {
-            width: 100%;
-            background-color: #e0e0e0;
-            border-radius: 5px;
-            height: 10px;
-            margin-bottom: 2rem;
-            overflow: hidden;
+            width: 100%; background-color: #e0e0e0; border-radius: 5px; height: 10px; margin-bottom: 2rem; overflow: hidden;
         }
         .progress-bar {
-            height: 100%;
-            width: 0%; /* Initial width */
-            background-color: #e91c63;
-            border-radius: 5px;
-            transition: width 0.5s ease-in-out;
+            height: 100%; width: 0%; background-color: #e91c63; border-radius: 5px; transition: width 0.5s ease-in-out;
         }
     </style>
 </head>
@@ -119,183 +70,305 @@
         <div class="flex justify-center mb-8 bg-[#c8284a] p-4 rounded-lg shadow">
             <img src="https://savington.ae/wp-content/uploads/2024/05/logo-light.png" alt="Savington Logo" class="h-12 md:h-16">
         </div>
-        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Health Insurance Quote</h1>
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Medical Insurance Quote</h1>
 
         <div class="progress-bar-container">
             <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
         </div>
-        <p id="progressText" class="text-center text-sm text-gray-600 mb-6">Step 1 of 2: Owner Details</p>
+        <p id="progressText" class="text-center text-sm text-gray-600 mb-6">Step 1 of 2: Personal Details</p>
 
         <form id="quoteForm" novalidate>
+            <!-- Step 1: Personal Details -->
             <div id="step1" class="step-section active">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">About Personal</h2>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Personal Details</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 mb-6">
 
                     <div>
-                        <label for="ownerNameInput" class="block text-sm font-medium text-gray-700">Full Name:</label>
-                        <input type="text" id="ownerNameInput" name="ownerNameInput" class="form-input-style" placeholder="Enter Full Name" required>
-                        <p class="text-red-500 text-xs italic hidden" id="ownerNameInputError">Full Name is required.</p>
+                        <label for="fullName" class="block text-sm font-medium text-gray-700">Full Name:</label>
+                        <input type="text" id="fullName" name="fullName" class="form-input-style" placeholder="Enter Full Name" required>
+                        <p class="text-red-500 text-xs italic hidden" id="fullNameError">Full Name is required.</p>
+                    </div>
+
+                    <div>
+                        <label for="dob" class="block text-sm font-medium text-gray-700">Date of Birth:</label>
+                        <input type="date" id="dob" name="dob" class="form-input-style" required>
+                        <p class="text-red-500 text-xs italic hidden" id="dobError">Date of Birth is required.</p>
                     </div>
 
                     <div>
                         <label for="nationalitySelect" class="block text-sm font-medium text-gray-700">Nationality:</label>
-                        <select id="nationalitySelect" name="nationalitySelect" class="" placeholder="Select Nationality" required>
-                            <option value="">Loading Nationalities...</option>
+                        <select id="nationalitySelect" name="nationalitySelect" placeholder="Select Nationality" required>
+                            <option value="">Select Nationality</option>
+                            <option value="Afghan">Afghan</option>
+                            <option value="Albanian">Albanian</option>
+                            <option value="Algerian">Algerian</option>
+                            <option value="American">American</option>
+                            <option value="Andorran">Andorran</option>
+                            <option value="Angolan">Angolan</option>
+                            <option value="Argentine">Argentine</option>
+                            <option value="Armenian">Armenian</option>
+                            <option value="Australian">Australian</option>
+                            <option value="Austrian">Austrian</option>
+                            <option value="Azerbaijani">Azerbaijani</option>
+                            <option value="Bahamian">Bahamian</option>
+                            <option value="Bahraini">Bahraini</option>
+                            <option value="Bangladeshi">Bangladeshi</option>
+                            <option value="Barbadian">Barbadian</option>
+                            <option value="Belarusian">Belarusian</option>
+                            <option value="Belgian">Belgian</option>
+                            <option value="Belizean">Belizean</option>
+                            <option value="Beninese">Beninese</option>
+                            <option value="Bhutanese">Bhutanese</option>
+                            <option value="Bolivian">Bolivian</option>
+                            <option value="Bosnian">Bosnian</option>
+                            <option value="Botswanan">Botswanan</option>
+                            <option value="Brazilian">Brazilian</option>
+                            <option value="British">British</option>
+                            <option value="Bruneian">Bruneian</option>
+                            <option value="Bulgarian">Bulgarian</option>
+                            <option value="Burkinabe">Burkinabe</option>
+                            <option value="Burmese">Burmese</option>
+                            <option value="Burundian">Burundian</option>
+                            <option value="Cambodian">Cambodian</option>
+                            <option value="Cameroonian">Cameroonian</option>
+                            <option value="Canadian">Canadian</option>
+                            <option value="Cape Verdean">Cape Verdean</option>
+                            <option value="Central African">Central African</option>
+                            <option value="Chadian">Chadian</option>
+                            <option value="Chilean">Chilean</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="Colombian">Colombian</option>
+                            <option value="Comoran">Comoran</option>
+                            <option value="Congolese">Congolese</option>
+                            <option value="Costa Rican">Costa Rican</option>
+                            <option value="Croatian">Croatian</option>
+                            <option value="Cuban">Cuban</option>
+                            <option value="Cypriot">Cypriot</option>
+                            <option value="Czech">Czech</option>
+                            <option value="Danish">Danish</option>
+                            <option value="Djiboutian">Djiboutian</option>
+                            <option value="Dominican">Dominican</option>
+                            <option value="Dutch">Dutch</option>
+                            <option value="East Timorese">East Timorese</option>
+                            <option value="Ecuadorean">Ecuadorean</option>
+                            <option value="Egyptian">Egyptian</option>
+                            <option value="Emirati">Emirati</option>
+                            <option value="Equatorial Guinean">Equatorial Guinean</option>
+                            <option value="Eritrean">Eritrean</option>
+                            <option value="Estonian">Estonian</option>
+                            <option value="Ethiopian">Ethiopian</option>
+                            <option value="Fijian">Fijian</option>
+                            <option value="Filipino">Filipino</option>
+                            <option value="Finnish">Finnish</option>
+                            <option value="French">French</option>
+                            <option value="Gabonese">Gabonese</option>
+                            <option value="Gambian">Gambian</option>
+                            <option value="Georgian">Georgian</option>
+                            <option value="German">German</option>
+                            <option value="Ghanaian">Ghanaian</option>
+                            <option value="Greek">Greek</option>
+                            <option value="Grenadian">Grenadian</option>
+                            <option value="Guatemalan">Guatemalan</option>
+                            <option value="Guinean">Guinean</option>
+                            <option value="Guyanese">Guyanese</option>
+                            <option value="Haitian">Haitian</option>
+                            <option value="Honduran">Honduran</option>
+                            <option value="Hungarian">Hungarian</option>
+                            <option value="Icelander">Icelander</option>
+                            <option value="Indian">Indian</option>
+                            <option value="Indonesian">Indonesian</option>
+                            <option value="Iranian">Iranian</option>
+                            <option value="Iraqi">Iraqi</option>
+                            <option value="Irish">Irish</option>
+                            <option value="Israeli">Israeli</option>
+                            <option value="Italian">Italian</option>
+                            <option value="Ivorian">Ivorian</option>
+                            <option value="Jamaican">Jamaican</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Jordanian">Jordanian</option>
+                            <option value="Kazakhstani">Kazakhstani</option>
+                            <option value="Kenyan">Kenyan</option>
+                            <option value="Kuwaiti">Kuwaiti</option>
+                            <option value="Kyrgyz">Kyrgyz</option>
+                            <option value="Laotian">Laotian</option>
+                            <option value="Latvian">Latvian</option>
+                            <option value="Lebanese">Lebanese</option>
+                            <option value="Liberian">Liberian</option>
+                            <option value="Libyan">Libyan</option>
+                            <option value="Lithuanian">Lithuanian</option>
+                            <option value="Luxembourger">Luxembourger</option>
+                            <option value="Macedonian">Macedonian</option>
+                            <option value="Malagasy">Malagasy</option>
+                            <option value="Malawian">Malawian</option>
+                            <option value="Malaysian">Malaysian</option>
+                            <option value="Maldivan">Maldivan</option>
+                            <option value="Malian">Malian</option>
+                            <option value="Maltese">Maltese</option>
+                            <option value="Marshallese">Marshallese</option>
+                            <option value="Mauritanian">Mauritanian</option>
+                            <option value="Mauritian">Mauritian</option>
+                            <option value="Mexican">Mexican</option>
+                            <option value="Micronesian">Micronesian</option>
+                            <option value="Moldovan">Moldovan</option>
+                            <option value="Monacan">Monacan</option>
+                            <option value="Mongolian">Mongolian</option>
+                            <option value="Montenegrin">Montenegrin</option>
+                            <option value="Moroccan">Moroccan</option>
+                            <option value="Mosotho">Mosotho</option>
+                            <option value="Motswana">Motswana</option>
+                            <option value="Mozambican">Mozambican</option>
+                            <option value="Namibian">Namibian</option>
+                            <option value="Nauruan">Nauruan</option>
+                            <option value="Nepalese">Nepalese</option>
+                            <option value="New Zealander">New Zealander</option>
+                            <option value="Nicaraguan">Nicaraguan</option>
+                            <option value="Nigerian">Nigerian</option>
+                            <option value="Nigerien">Nigerien</option>
+                            <option value="North Korean">North Korean</option>
+                            <option value="Northern Irish">Northern Irish</option>
+                            <option value="Norwegian">Norwegian</option>
+                            <option value="Omani">Omani</option>
+                            <option value="Pakistani">Pakistani</option>
+                            <option value="Palauan">Palauan</option>
+                            <option value="Panamanian">Panamanian</option>
+                            <option value="Papua New Guinean">Papua New Guinean</option>
+                            <option value="Paraguayan">Paraguayan</option>
+                            <option value="Peruvian">Peruvian</option>
+                            <option value="Polish">Polish</option>
+                            <option value="Portuguese">Portuguese</option>
+                            <option value="Qatari">Qatari</option>
+                            <option value="Romanian">Romanian</option>
+                            <option value="Russian">Russian</option>
+                            <option value="Rwandan">Rwandan</option>
+                            <option value="Saint Lucian">Saint Lucian</option>
+                            <option value="Salvadoran">Salvadoran</option>
+                            <option value="Samoan">Samoan</option>
+                            <option value="San Marinese">San Marinese</option>
+                            <option value="Sao Tomean">Sao Tomean</option>
+                            <option value="Saudi">Saudi</option>
+                            <option value="Scottish">Scottish</option>
+                            <option value="Senegalese">Senegalese</option>
+                            <option value="Serbian">Serbian</option>
+                            <option value="Seychellois">Seychellois</option>
+                            <option value="Sierra Leonean">Sierra Leonean</option>
+                            <option value="Singaporean">Singaporean</option>
+                            <option value="Slovakian">Slovakian</option>
+                            <option value="Slovenian">Slovenian</option>
+                            <option value="Solomon Islander">Solomon Islander</option>
+                            <option value="Somali">Somali</option>
+                            <option value="South African">South African</option>
+                            <option value="South Korean">South Korean</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="Sri Lankan">Sri Lankan</option>
+                            <option value="Sudanese">Sudanese</option>
+                            <option value="Surinamer">Surinamer</option>
+                            <option value="Swazi">Swazi</option>
+                            <option value="Swedish">Swedish</option>
+                            <option value="Swiss">Swiss</option>
+                            <option value="Syrian">Syrian</option>
+                            <option value="Taiwanese">Taiwanese</option>
+                            <option value="Tajik">Tajik</option>
+                            <option value="Tanzanian">Tanzanian</option>
+                            <option value="Thai">Thai</option>
+                            <option value="Togolese">Togolese</option>
+                            <option value="Tongan">Tongan</option>
+                            <option value="Trinidadian or Tobagonian">Trinidadian or Tobagonian</option>
+                            <option value="Tunisian">Tunisian</option>
+                            <option value="Turkish">Turkish</option>
+                            <option value="Tuvaluan">Tuvaluan</option>
+                            <option value="Ugandan">Ugandan</option>
+                            <option value="Ukrainian">Ukrainian</option>
+                            <option value="Uruguayan">Uruguayan</option>
+                            <option value="Uzbekistani">Uzbekistani</option>
+                            <option value="Venezuelan">Venezuelan</option>
+                            <option value="Vietnamese">Vietnamese</option>
+                            <option value="Welsh">Welsh</option>
+                            <option value="Yemenite">Yemenite</option>
+                            <option value="Zambian">Zambian</option>
+                            <option value="Zimbabwean">Zimbabwean</option>
                         </select>
                         <p class="text-red-500 text-xs italic hidden" id="nationalitySelectError">Nationality is required.</p>
                     </div>
 
                     <div>
-                        <label for="ownerEmailInput" class="block text-sm font-medium text-gray-700">Email Address:</label>
-                        <input type="email" id="ownerEmailInput" name="ownerEmailInput" class="form-input-style" placeholder="example@domain.com" required>
-                        <p class="text-red-500 text-xs italic hidden" id="ownerEmailInputError">Valid Email Address is required.</p>
+                        <label for="residenceEmirate" class="block text-sm font-medium text-gray-700">Emirate of Residence:</label>
+                        <select id="residenceEmirate" name="residenceEmirate" class="form-input-style" required>
+                            <option value="">Select Emirate</option>
+                            <option value="Abu Dhabi">Abu Dhabi</option>
+                            <option value="Dubai">Dubai</option>
+                            <option value="Sharjah">Sharjah</option>
+                            <option value="Ajman">Ajman</option>
+                            <option value="Umm Al Quwain">Umm Al Quwain</option>
+                            <option value="Ras Al Khaimah">Ras Al Khaimah</option>
+                            <option value="Fujairah">Fujairah</option>
+                        </select>
+                         <p class="text-red-500 text-xs italic hidden" id="residenceEmirateError">Emirate of Residence is required.</p>
                     </div>
 
                     <div>
-                        <label for="ownerMobileInput" class="block text-sm font-medium text-gray-700">Mobile Number:</label>
-                        <input type="tel" id="ownerMobileInput" name="ownerMobileInput" class="form-input-style" placeholder="e.g., 05XXXXXXXX" required>
-                        <p class="text-red-500 text-xs italic hidden" id="ownerMobileInputError">Mobile Number is required.</p>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address:</label>
+                        <input type="email" id="email" name="email" class="form-input-style" placeholder="example@domain.com" required>
+                        <p class="text-red-500 text-xs italic hidden" id="emailError">Valid Email Address is required.</p>
                     </div>
 
                     <div>
-                        <label for="ownerDobInput" class="block text-sm font-medium text-gray-700">Owner's Date of Birth:</label>
-                        <input type="date" id="ownerDobInput" name="ownerDobInput" class="form-input-style" required>
-                        <p class="text-red-500 text-xs italic hidden" id="ownerDobInputError">Date of Birth is required.</p>
+                        <label for="mobile" class="block text-sm font-medium text-gray-700">Mobile Number:</label>
+                        <input type="tel" id="mobile" name="mobile" class="form-input-style" placeholder="e.g., 05XXXXXXXX" required>
+                        <p class="text-red-500 text-xs italic hidden" id="mobileError">Mobile Number is required.</p>
                     </div>
 
-                    <div>
-                        <label for="driverAgeDisplay" class="block text-sm font-medium text-gray-700">Driver Age:</label>
-                        <span id="driverAgeDisplay" class="display-field">---</span>
+                    <div class="md:col-span-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Gender:</label>
+                        <div class="mt-2 flex items-center space-x-6 pt-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio" name="gender" value="Male" checked>
+                                <span class="ml-2 text-sm text-gray-800">Male</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio" name="gender" value="Female">
+                                <span class="ml-2 text-sm text-gray-800">Female</span>
+                            </label>
+                        </div>
                     </div>
 
-                    <div class="md:col-span-2">
-                        <label for="licenseIssueDateInput" class="block text-sm font-medium text-gray-700">Owner's UAE Driving License Issue Date:</label>
-                        <input type="date" id="licenseIssueDateInput" name="licenseIssueDateInput" class="form-input-style" required>
-                        <p class="text-red-500 text-xs italic hidden" id="licenseIssueDateInputError">License Issue Date is required.</p>
+                     <div class="md:col-span-1">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Are you a smoker?</label>
+                        <div class="mt-2 flex items-center space-x-6 pt-2">
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio" name="smoker" value="Yes">
+                                <span class="ml-2 text-sm text-gray-800">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" class="form-radio" name="smoker" value="No" checked>
+                                <span class="ml-2 text-sm text-gray-800">No</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
                 <button type="button" id="nextStepButton" class="w-full mt-6 bg-[#e91c63] hover:bg-[#d81b60] text-white font-bold py-2.5 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e91c63] focus:ring-offset-2 focus:ring-opacity-75 transition duration-150 ease-in-out">
-                    Next: Personal Details
+                    Next
                 </button>
             </div>
 
+            <!-- Step 2: Plan Details (Blank for now) -->
             <div id="step2" class="step-section">
-                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Vehicle Details</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 mb-6">
-
-                    <div> <label for="modelYear" class="block text-sm font-medium text-gray-700">Model Year:</label>
-                        <select id="modelYear" name="modelYear" class="" required> <option value="">Select Model Year</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="modelYearError">Model Year is required.</p>
-                    </div>
-
-                    <div> <label for="make" class="block text-sm font-medium text-gray-700">Make:</label>
-                        <select id="make" name="make" class="" placeholder="Select Make" required> <option value="">Loading Makes...</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="makeError">Make is required.</p>
-                    </div>
-
-                    <div> <label for="model" class="block text-sm font-medium text-gray-700">Model:</label>
-                        <select id="model" name="model" disabled class="" required> <option value="">Select Year and Make first</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="modelError">Model is required.</p>
-                    </div>
-
-                    <div> <label for="trim" class="block text-sm font-medium text-gray-700">Trim:</label>
-                        <select id="trim" name="trim" disabled class="" required> <option value="">Select Model first</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="trimError">Trim is required.</p>
-                    </div>
-
-                    <div> <label for="bodyType" class="block text-sm font-medium text-gray-700">Body Type:</label>
-                        <select id="bodyType" name="bodyType" disabled class="" required> <option value="">Select Trim first</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="bodyTypeError">Body Type is required.</p>
-                    </div>
-
-                    <div> <label for="engineSize" class="block text-sm font-medium text-gray-700">Engine Size:</label>
-                        <select id="engineSize" name="engineSize" disabled class="" required> <option value="">Select Body Type first</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="engineSizeError">Engine Size is required.</p>
-                    </div>
-
-                    <div> <label for="doorsSelect" class="block text-sm font-medium text-gray-700">Number of Doors:</label>
-                        <select id="doorsSelect" name="doorsSelect" disabled class="" required> <option value="">Select Body Type first</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="doorsSelectError">Number of Doors is required.</p>
-                    </div>
-
-                    <div> <label for="transmissionSelect" class="block text-sm font-medium text-gray-700">Transmission:</label>
-                        <select id="transmissionSelect" name="transmissionSelect" disabled class="" required> <option value="">Select Engine Size first</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="transmissionSelectError">Transmission is required.</p>
-                    </div>
-
-                    <div> <label for="cylinderSelect" class="block text-sm font-medium text-gray-700">Cylinders:</label>
-                        <select id="cylinderSelect" name="cylinderSelect" disabled class="" required> <option value="">Select Engine Size first</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="cylinderSelectError">Cylinders is required.</p>
-                    </div>
-
-                    <div> <label for="citySelect" class="block text-sm font-medium text-gray-700">City of Registration:</label>
-                        <select id="citySelect" name="citySelect" class="" required> <option value="">Select City</option> <option value="Dubai">Dubai</option><option value="Abu Dhabi">Abu Dhabi</option><option value="Sharjah">Sharjah</option><option value="Ajman">Ajman</option><option value="Umm Al Quwain">Umm Al Quwain</option><option value="Ras Al Khaimah">Ras Al Khaimah</option><option value="Fujairah">Fujairah</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="citySelectError">City of Registration is required.</p>
-                    </div>
-
-                    <div class="md:col-span-2"> <label class="block text-sm font-medium text-gray-700 mb-1">Vehicle Specification:</label>
-                        <div class="mt-2 flex items-center space-x-6">
-                            <label class="inline-flex items-center">
-                                <input type="radio" class="form-radio" name="vehicleSpec" value="GCC" checked>
-                                <span class="ml-2 text-sm text-gray-800">GCC</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" class="form-radio" name="vehicleSpec" value="Non-GCC"> <span class="ml-2 text-sm text-gray-800">Non GCC</span>
-                            </label>
-                        </div>
-                        <p class="text-red-500 text-xs italic hidden" id="vehicleSpecError">Vehicle Specification is required.</p>
-                    </div>
-
-                    <div> <label for="ncdSelect" class="block text-sm font-medium text-gray-700">No Claim Discount (Years):</label>
-                        <select id="ncdSelect" name="ncdSelect" class="" required> <option value="0">0 Years</option><option value="1">1 Year</option><option value="2">2 Years</option><option value="3">3 Years</option><option value="4">4 Years</option><option value="5">5 Years</option> </select>
-                        <p class="text-red-500 text-xs italic hidden" id="ncdSelectError">No Claim Discount is required.</p>
-                    </div>
-
-                    <div class="md:col-span-2"> <label for="sumInsuredTextInput" class="block text-sm font-medium text-gray-700">Vehicle Value (Sum Insured in AED)</label>
-                        <div class="mt-1 relative rounded-md shadow-sm border-b-2 border-[var(--field-border-color)] focus-within:border-[var(--field-focus-border-color)]"> <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <span class="text-gray-500 sm:text-sm"> </span>
-                                </div>
-                                <input type="number" name="sumInsuredText" id="sumInsuredTextInput"
-                                       class="block w-full border-0 pl-10 pr-28 py-2 sm:text-sm bg-transparent focus:outline-none focus:ring-0 focus:border-transparent disabled:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-70"
-                                       placeholder="Value"
-                                       aria-describedby="sum-insured-range-text"
-                                       step="100"
-                                       disabled required> <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                    <span class="text-gray-500 sm:text-sm whitespace-nowrap" id="sum-insured-range-text">
-                                        Range: ---
-                                    </span>
-                                </div>
-                        </div>
-                        <p class="mt-1 text-xs text-gray-500" id="sum-insured-range-description">Min/Max determined after selecting vehicle details.</p>
-                        <p id="sumInsuredTextInputError" class="text-red-600 text-xs mt-1 hidden">Value must be within the allowed range.</p>
-
-                        <div id="sumInsuredContainer" class="mt-4 opacity-50 pointer-events-none"> <label for="sumInsuredSlider" class="block text-sm font-medium text-gray-500 mb-2">Adjust Using Slider (Optional)</label>
-                                <input type="range" id="sumInsuredSlider" name="sumInsuredSlider" min="0" max="100000" step="100" value="50000" disabled
-                                       class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer themed-slider">
-                                <div class="flex justify-between text-xs text-gray-500 mt-1 px-1">
-                                    <span id="sumInsuredMinLabel">Min</span>
-                                    <span id="sumInsuredMaxLabel">Max</span>
-                                </div>
-                                <div id="sumInsuredErrorDisplay" class="text-red-600 text-xs mt-1 hidden">Error</div>
-                            </div>
-                    </div>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Plan Details</h2>
+                <div class="text-center py-12">
+                    <p class="text-gray-500">This section is under construction.</p>
                 </div>
-
                 <div class="mt-6 flex justify-between gap-4">
                     <button type="button" id="backStepButton" class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2.5 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-opacity-75 transition duration-150 ease-in-out">
                         Back
                     </button>
-                    <button type="submit" id="getPremiumButton" class="flex-1 bg-[#e91c63] hover:bg-[#d81b60] text-white font-bold py-2.5 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#e91c63] focus:ring-offset-2 focus:ring-opacity-75 transition duration-150 ease-in-out">
-                        Get Premium
-                    </button>
+                    <!-- Submit button will be added in a future step -->
                 </div>
             </div>
 
             <div id="tokenDisplay" class="mt-4 text-xs text-gray-400"></div>
-
             <div id="quoteResult" class="mt-4 text-sm"></div>
         </form>
 
+        <!-- Error Modal (Structure remains the same) -->
         <div id="errorModal" class="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center hidden z-50 transition-opacity duration-300 ease-out" aria-labelledby="modal-title" role="dialog" aria-modal="true">
             <div class="relative mx-auto p-6 border w-11/12 sm:w-3/4 md:w-1/2 lg:w-1/3 shadow-xl rounded-lg bg-white transform transition-all duration-300 ease-out scale-95 opacity-0" id="errorModalContent">
                 <button id="closeErrorModalButtonTop" type="button" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 focus:outline-none" aria-label="Close modal">
@@ -323,7 +396,7 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="/vendor/choices/choices.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
     <script src="script.js"></script>
 
 </body>
